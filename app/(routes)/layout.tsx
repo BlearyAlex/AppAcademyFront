@@ -10,7 +10,9 @@ export default function LayoutDashboard({ children }: { children: React.ReactEle
             </div>
             <div className='w-full xl:ml-80'>
                 <Navbar />
-                {children}
+                <div className='p-6 bg-[#fafbfc] dark:bg-secondary'>
+                    {children}
+                </div>
             </div>
         </div>
     )
