@@ -4,13 +4,11 @@ import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css";
 
 const geistSans = Noto_Sans_Display({
-  variable: "--font-geist-sans",
-  weight: ["100", "900"],
+  weight: ["400", "900"],
   subsets: ["latin"]
 });
 const geistMono = Noto_Sans_Display({
-  variable: "--font-geist-mono",
-  weight: ["100", "900"],
+  weight: ["600", "900"],
   subsets: ["latin"]
 });
 
@@ -27,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.className} ${geistMono.className} antialiased`}
       >
         <ThemeProvider
           attribute="class"
