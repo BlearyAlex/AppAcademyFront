@@ -5,6 +5,5 @@ export type SidebarItemProps = {
         label: string,
         icon: LucideIcon,
         href: string
-    },
-    key: string
+    };
 }

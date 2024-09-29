@@ -1,28 +1,29 @@
 import {
     BarChart4,
     Building2,
-    PanelsTopLeft,
     Settings,
     ShieldCheck,
     CircleHelpIcon,
-    Calendar
+    Bookmark,
+    ShoppingBasket,
+    Package
 } from 'lucide-react'
 
 export const dataGeneralSideBar = [
     {
-        icon: PanelsTopLeft,
-        label: "Dashboard",
-        href: "/"
+        icon: ShoppingBasket,
+        label: "Productos",
+        href: "/products"
     },
     {
-        icon: Building2,
-        label: "Companies",
-        href: "/companies"
+        icon: Package,
+        label: "Categorias",
+        href: "/categories"
     },
     {
-        icon: Calendar,
-        label: "Calendar",
-        href: "/task"
+        icon: Bookmark,
+        label: "Marcas",
+        href: "/brands"
     }
 ]
 

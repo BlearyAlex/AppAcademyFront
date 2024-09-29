@@ -20,17 +20,17 @@ export function HeaderCompanies() {
 
     return (
         <div className="flex justify-between items-center">
-            <h2 className="text-2xl">List of Companies</h2>
+            <h2 className="text-2xl">Lista de Productos</h2>
 
             <Dialog open={openModalCreate} onOpenChange={setOpenModalCreate}>
                 <DialogTrigger asChild>
-                    <Button>Create Company</Button>
+                    <Button>Crear Producto</Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[625px]">
                     <DialogHeader>
-                        <DialogTitle>Create Customer</DialogTitle>
+                        <DialogTitle>Crear Producto</DialogTitle>
                         <DialogDescription>
-                            Create and configure your customer
+                            Crear y personaliza tu producto
                         </DialogDescription>
                     </DialogHeader>
 
