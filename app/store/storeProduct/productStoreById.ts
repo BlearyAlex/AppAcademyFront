@@ -7,6 +7,7 @@ interface ProductById {
     precio: number;
     estadoProducto: string;
     image: string
+    descripcion: string
 }
 
 interface ProductStoreById {

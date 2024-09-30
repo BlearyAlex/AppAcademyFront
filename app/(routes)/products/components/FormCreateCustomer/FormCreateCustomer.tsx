@@ -8,44 +8,78 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FormCreateCustomerProps } from "./FormCreateCustomer.types"
 import { Select, SelectValue, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+
+import { useCreateProductStore } from "@/app/store/storeProduct/createProductStore"
 
 const formSchema = z.object({
-    name: z.string(),
-    country: z.string().min(2),
-    website: z.string().min(2),
-    image: z.string()
-})
+    nombre: z.string().min(1, 'El nombre es requerido'),
+    codigoBarras: z.string().min(1, 'El código de barras es requerido'),
+    descripcion: z.string(),
+    imagen: z.string().min(1, 'URL de imagen inválida'),
+    costo: z.preprocess((val) => Number(val), z.number().min(0)),
+    utilidad: z.preprocess((val) => Number(val), z.number().min(0)),
+    precio: z.number().min(0),
+    descuentoBase: z.preprocess((val) => Number(val), z.number().min(0)),
+    impuesto: z.preprocess((val) => Number(val), z.number().min(0)),
+    estadoProducto: z.number().int().min(0).max(1, 'El estado del producto es requerido'),
+    stockMinimo: z.preprocess((val) => Number(val), z.number().min(0)),
+});
+
 
 export function FormCreateCustomer(props: FormCreateCustomerProps) {
     const { setOpenModalCreate } = props
     const [photoUploaded, setPhotoUploaded] = useState(false)
+    const { addCustomer } = useCreateProductStore();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            country: "",
-            website: "",
-            image: ""
+            nombre: "",
+            codigoBarras: "",
+            descripcion: "",
+            imagen: "",
+            costo: 0,
+            utilidad: 0,
+            precio: 0,
+            descuentoBase: 0,
+            impuesto: 0,
+            estadoProducto: 0,
+            stockMinimo: 0,
         },
     })
 
     const { isValid } = form.formState
 
+    useEffect(() => {
+        console.log('Formulario válido:', isValid);
+    }, [isValid]);
+
+    const { watch, setValue } = form
+    const costo = watch("costo");
+    const utilidad = watch("utilidad");
+
+    useEffect(() => {
+        console.log('Costo:', costo);
+        console.log('Utilidad:', utilidad);
+
+        const calculatedPrecio = Number(costo) + Number(utilidad);
+        setValue("precio", calculatedPrecio);
+    }, [costo, utilidad, setValue])
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-
-        console.log(values)
+        console.log('Valores a enviar:', values);
+        await addCustomer(values);
+        setOpenModalCreate(false);
     }
 
     return (
@@ -54,7 +88,7 @@ export function FormCreateCustomer(props: FormCreateCustomerProps) {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <FormField
                         control={form.control}
-                        name="name"
+                        name="imagen"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Imagen del Producto</FormLabel>
@@ -69,7 +103,7 @@ export function FormCreateCustomer(props: FormCreateCustomerProps) {
                     <div className="grid grid-cols-2 gap-3">
                         <FormField
                             control={form.control}
-                            name="name"
+                            name="nombre"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Nombre del Producto</FormLabel>
@@ -82,22 +116,22 @@ export function FormCreateCustomer(props: FormCreateCustomerProps) {
                         />
                         <FormField
                             control={form.control}
-                            name="country"
+                            name="estadoProducto"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Estado del Producto</FormLabel>
+                                    <FormLabel>Estado</FormLabel>
                                     <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
+                                        onValueChange={(value) => field.onChange(Number(value))} // Convierte el valor a número aquí
+                                        defaultValue={field.value !== undefined ? field.value.toString() : ''}
                                     >
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Select the country" />
+                                                <SelectValue placeholder="Seleccionar estado del producto" />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="mexico">Mexico</SelectItem>
-                                            <SelectItem value="united-kingdom">United Kingdom</SelectItem>
+                                            <SelectItem value="0">Alta</SelectItem>
+                                            <SelectItem value="1">Baja</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />
@@ -106,7 +140,7 @@ export function FormCreateCustomer(props: FormCreateCustomerProps) {
                         />
                         <FormField
                             control={form.control}
-                            name="name"
+                            name="codigoBarras"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Codigo de Barras</FormLabel>
@@ -119,12 +153,16 @@ export function FormCreateCustomer(props: FormCreateCustomerProps) {
                         />
                         <FormField
                             control={form.control}
-                            name="name"
+                            name="descripcion"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Descripcion</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Breve Descripcion" type="text" {...field} />
+                                        <Textarea
+                                            placeholder=""
+                                            {...field}
+                                            value={form.getValues().descripcion ?? ''}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -136,7 +174,7 @@ export function FormCreateCustomer(props: FormCreateCustomerProps) {
                         <div>
                             <FormField
                                 control={form.control}
-                                name="name"
+                                name="costo"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Costo</FormLabel>
@@ -149,7 +187,7 @@ export function FormCreateCustomer(props: FormCreateCustomerProps) {
                             />
                             <FormField
                                 control={form.control}
-                                name="name"
+                                name="utilidad"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Utilidad</FormLabel>
@@ -162,12 +200,12 @@ export function FormCreateCustomer(props: FormCreateCustomerProps) {
                             />
                             <FormField
                                 control={form.control}
-                                name="name"
+                                name="precio"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Precio</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Precio Producto" type="number" {...field} />
+                                            <Input disabled placeholder="Precio Producto" type="number" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -177,7 +215,7 @@ export function FormCreateCustomer(props: FormCreateCustomerProps) {
                         <div>
                             <FormField
                                 control={form.control}
-                                name="name"
+                                name="descuentoBase"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Descuento Base</FormLabel>
@@ -190,7 +228,7 @@ export function FormCreateCustomer(props: FormCreateCustomerProps) {
                             />
                             <FormField
                                 control={form.control}
-                                name="name"
+                                name="impuesto"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Impuesto</FormLabel>
@@ -203,12 +241,12 @@ export function FormCreateCustomer(props: FormCreateCustomerProps) {
                             />
                             <FormField
                                 control={form.control}
-                                name="name"
+                                name="stockMinimo"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Stock Minimo</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="" type="number" {...field} />
+                                            <Input type="number" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -216,7 +254,7 @@ export function FormCreateCustomer(props: FormCreateCustomerProps) {
                             />
                         </div>
                     </div>
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit" >Submit</Button>
                 </form>
             </Form>
         </div>

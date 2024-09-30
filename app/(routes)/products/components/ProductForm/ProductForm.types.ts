@@ -1,10 +1,15 @@
 export type Product = {
-    productoId: string;
-    nombre: string;
-    precio: number;
-    estadoProducto: string;
-    image: string;
-    descripcion: string;
+    nombre: string,
+    codigoBarras: string,
+    descripcion: string,
+    imagen: string,
+    costo: number,
+    utilidad: number,
+    precio: number,
+    descuentoBase: number,
+    impuesto: number,
+    estadoProducto: number,
+    stockMinimo: number,
     // Agrega más propiedades según la estructura de tu API
 };
 

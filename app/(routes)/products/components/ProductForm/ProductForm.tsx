@@ -27,7 +27,16 @@ export function ProductForm(props: ProductFormProps) {
         resolver: zodResolver(formSchema),
         defaultValues: {
             nombre: product.nombre,
-            descripcion: product.descripcion
+            codigoBarras: product.codigoBarras,
+            descripcion: product.descripcion,
+            imagen: product.imagen,
+            costo: product.costo,
+            utilidad: product.utilidad,
+            precio: product.precio,
+            descuentoBase: product.descuentoBase,
+            impuesto: product.impuesto,
+            estadoProducto: product.estadoProducto,
+            stockMinimo: product.stockMinimo,
         }
     })
 
@@ -64,22 +73,22 @@ export function ProductForm(props: ProductFormProps) {
                     />
                     <FormField
                         control={form.control}
-                        name="nombre"
+                        name="estadoProducto"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Nombre Producto</FormLabel>
+                                <FormLabel>Estado</FormLabel>
                                 <Select
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
+                                    onValueChange={(value) => field.onChange(Number(value))} // Convierte el valor a número aquí
+                                    defaultValue={field.value !== undefined ? field.value.toString() : ''}
                                 >
                                     <FormControl>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Selecciona el Estado" />
+                                            <SelectValue placeholder="Seleccionar estado del producto" />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        <SelectItem value="baja">Baja</SelectItem>
-                                        <SelectItem value="alta">Alta</SelectItem>
+                                        <SelectItem value="0">Alta</SelectItem>
+                                        <SelectItem value="1">Baja</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -88,21 +97,12 @@ export function ProductForm(props: ProductFormProps) {
                     />
                     <FormField
                         control={form.control}
-                        name="nombre"
+                        name="codigoBarras"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Nombre Producto</FormLabel>
+                                <FormLabel>Codigo de Barras</FormLabel>
                                 <FormControl>
-                                    <div>
-                                        {/* {product.image ? (
-                                            <p className="text-sm">Imagen Subida</p>
-                                        ) : (
-                                            <Upload
-                                                className="bg-slate-600/20 text-slate-800 rounded-lg outline-dotted outline-3"
-                                                {...field}
-                                            />
-                                        )} */}
-                                    </div>
+                                    <Input placeholder="" type="text" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -110,10 +110,10 @@ export function ProductForm(props: ProductFormProps) {
                     />
                     <FormField
                         control={form.control}
-                        name="nombre"
+                        name="descripcion"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Nombre Producto</FormLabel>
+                                <FormLabel>Descripcion</FormLabel>
                                 <FormControl>
                                     <Textarea
                                         placeholder=""
