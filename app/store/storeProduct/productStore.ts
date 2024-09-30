@@ -1,9 +1,8 @@
 import { create } from 'zustand'
 import axiosInstance from '@/lib/axiosInstance'
-import axios from 'axios';
 
 interface Product {
-    id: string;
+    productoId: string;
     nombre: string;
     precio: number;
     estadoProducto: string;

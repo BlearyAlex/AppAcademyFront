@@ -1,6 +1,6 @@
 // types.ts
 export interface Product {
-    id: string;
+    productoId: string;
     nombre: string;
     precio: number;
     estadoProducto: string;

@@ -3,7 +3,7 @@
 import { DataTable } from "./data-table"
 import { columns } from "./columns"
 
-import { useProductStore } from "@/app/store/productStore"
+import { useProductStore } from "@/app/store/storeProduct/productStore"
 import { useEffect } from "react"
 
 

@@ -7,8 +7,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import Link from "next/link"
 import Image from "next/image"
 
-import { useEffect } from "react"
-import { useProductStore } from "@/app/store/productStore"
 import { Product } from "./types"
 
 export const columns: ColumnDef<Product>[] = [
@@ -66,7 +64,7 @@ export const columns: ColumnDef<Product>[] = [
         id: "actions",
         header: "Actions",
         cell: ({ row }) => {
-            const { id } = row.original
+            const { productoId } = row.original
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger>
@@ -76,7 +74,7 @@ export const columns: ColumnDef<Product>[] = [
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <Link href={`/GetProductoById/${id}`}>
+                        <Link href={`/products/${productoId}`}>
                             <DropdownMenuItem>
                                 <Pencil className="w-4 h-4 mr-2" />
                                 Edit

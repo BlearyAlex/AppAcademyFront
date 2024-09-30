@@ -69,8 +69,8 @@ export function DataTable<TData, TValue>({
             <div className="flex items-center mb-2">
                 <Input
                     placeholder="Filtrar por producto"
-                    value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)} />
+                    value={(table.getColumn("nombre")?.getFilterValue() as string) ?? ""}
+                    onChange={(event) => table.getColumn("nombre")?.setFilterValue(event.target.value)} />
             </div>
             <div className="rounded-md border">
                 <Table>
